@@ -1,0 +1,64 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: student-course-security-service
+        uri: http://localhost:9999/
+        predicates:
+        - Method=POST
+        - Path=/auth/register
+        
+      - id: student-course-security-service
+        uri: http://localhost:9999/
+        predicates:
+        - Method=POST
+        - Path=/auth/token
+        
+      - id: course-microservice
+        uri: http://localhost:8082/
+        predicates:
+        - Method=POST
+        - Path=/course/create
+        filters:
+        - AuthenticationFilter
+        
+      - id: course-microservice
+        uri: http://localhost:8082/
+        predicates:
+        - Method=GET
+        - Path=/course/getCourses
+        filters:
+        - AuthenticationFilter
+          
+      - id: course-microservice
+        uri: http://localhost:8082/
+        predicates:
+        - Method=GET
+        - Path=/course/getById/**
+        filters:
+        - AuthenticationFilter
+        
+      - id: student-microservice
+        uri: http://localhost:8080/
+        predicates:
+        - Method=GET
+        - Path=/student/getAllStudents
+        filters:
+        - AuthenticationFilter
+        
+      - id: student-microservice
+        uri: http://localhost:8080/
+        predicates:
+        - Method=GET
+        - Path=/student/getById/**
+        filters:
+        - AuthenticationFilter
+       
+      - id: student-microservice
+        uri: http://localhost:8080/
+        predicates:
+        - Method=POST
+        - Path=/student/create
+        filters:
+        - AuthenticationFilter
+        
